@@ -1,0 +1,23 @@
+{
+  "name": "threading",
+  "version": "1.0.0",
+  "description": "Multi vs Singel threading",
+  "main": "threaded.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Aviv Assayag",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "cheerio": "^1.0.0-rc.10",
+    "cluster": "^0.7.7",
+    "deasync": "^0.1.26",
+    "express": "^4.18.1",
+    "http": "^0.0.1-security",
+    "nodemon": "^2.0.16",
+    "puppeteer": "^14.0.0",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6"
+  }
+}
