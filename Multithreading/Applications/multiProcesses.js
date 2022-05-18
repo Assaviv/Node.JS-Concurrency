@@ -1,4 +1,5 @@
-const cluster = require('cluster')
+const cluster = require('cluster');
+const { sleep } = require('deasync');
 
 // This code uses 100% of the CPU
 // However this is not enough, the program is not working well
@@ -40,14 +41,16 @@ else {
             fs.writeFile('Songs/multi.txt', data, (err, result) => {
                 if(err) console.log("Error: ", err);
             });
-            console.log("Writing..");
+            // console.log("Writing..");
         } else {
             console.log("Cant write!");
         }
 
         // I don't like this solution, time wrapper should be more generic.
         ++temp;
-        if (temp === 1000)
+        console.log(temp);
+        // not getting even close to 1000 -> multiprocessing
+        if (temp === 125)
         {
             var endIn = performance.now();
             console.log('Runtime: ', (endIn - startIn)/1000 + ' seconds');
@@ -61,7 +64,7 @@ else {
         .then(response => {
             // Editing the file -> CPU bound action
             write(response.data.replaceAll('.', '.\n'));
-            console.log("Reading...");
+            // console.log("Reading...");
         })
         .catch(error => {
             // catch all the weird error that needed to be handled
@@ -81,8 +84,9 @@ else {
     // activate the download several times
     const getData = (from) => {
         console.log("Start downloading");
-        for (let i = 0; i < 1000; i++) {
+        for (let i = 0; i < (1000 / require('os').cpus().length); i++) {
             download2(from);
+            sleep(20)
         }
         console.log("Finished downloading");
     }
@@ -93,12 +97,18 @@ else {
         var startIn = performance.now();
         // call the desired function with it's params
         timeWrapper(getData, web)
+        var endIn = performance.now();
+        console.log(' - Runtime: ', (endIn - startIn)/1000 + ' seconds');
 
     } catch (error) {
         console.log(error);
     }
 
 }
+
+console.log(require('os').cpus().length);
+console.log("------------------- " + 1000/ require('os').cpus().length + " ----------------------");
+
 
 // On 127.0.0.1 => Error connection refused
 // On MyIP => Error connection reset ECONNRESET

@@ -2,7 +2,7 @@ const cluster = require('cluster')
 
 if (cluster.isMaster) {
     const cpus = require('os').cpus().length;
-    for (let i = 0; i < cpus; i++) {
+    for (let i = 0; i < 1; i++) {
         cluster.fork();
     }
 }

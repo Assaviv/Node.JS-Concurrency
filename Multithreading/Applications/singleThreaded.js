@@ -1,10 +1,12 @@
 const fs = require('fs');
 const http = require('http')
 const axios = require('axios');
+const { sleep } = require('deasync');
 
 // npm config set proxy null
 
 var temp = 0;
+var errors = 0;
 
 const web = {
     host: 'localhost',
@@ -14,28 +16,32 @@ const web = {
   
 function write(data) {
     fs.writeFileSync('Songs/single.txt', data);
-    console.log("Writing..");
-    // I don't like this soulution, time wrapper should be more generic.
+    // console.log("Writing..");
+    // I don't like this solution, time wrapper should be more generic.
     ++temp;
+    // console.log(temp);
+    process.stdout.write('.');
     if (temp === 1000)
     {
         var endIn = performance.now();
-        console.log('Runtime: ', (endIn - startIn)/1000 + ' seconds');
+        console.log('Runtime: ', (endIn - startIn)/1000 + ' seconds with ERRORS: ' + errors);
     }
 }
 
 async function download2(options) {
     await axios.get('http://10.42.128.61:3000/')
     .then(response => {
-        console.log("Reading...");
+        // console.log("Reading...");
         write(response.data.replaceAll('.', '.\n'));
     })
     .catch(error => {
-        console.log(error.code);
+        console.log("ERROR: " + error.code);
+        ++temp;
+        ++errors;
     })
 }
 
-// Don't work well, often colapse
+// Don't work well, often collapse
 function download(options)
 {
     var data = '';
@@ -64,6 +70,7 @@ const getData = (from) => {
     console.log("Start downloading");
     for (let i = 0; i < 1000; i++) {
         download2(from);  // wait for this to finish
+        sleep(0)  // Sometimes work with sleep sometimes dont
     }
     console.log("Finished downloading");
 }
@@ -72,7 +79,6 @@ const getData = (from) => {
 try {
     var startIn = performance.now();
     timeWrapper(getData, web)
-
 } catch (error) {
-    console.log(error);
+    console.log("ERROR: " + error);
 }
