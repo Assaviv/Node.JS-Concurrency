@@ -55,6 +55,7 @@ else {
         {
             var endIn = performance.now();
             console.log('Runtime: ', (endIn - startIn)/1000 + ' seconds');
+            // System won't kill program, so i do
             process.exit();
         }
     }
@@ -65,7 +66,7 @@ else {
         axios.get('http://10.42.128.61:3000/')
         .then(response => {
             // Editing the file -> CPU bound action
-            var path = 'Songs/multi' + temp + '.txt';
+            var path = 'Songs/multi'+ cluster.worker.id + '-' + temp + '.txt';
             write(response.data.replaceAll('.', '.\n'), path);
             // console.log("Reading...");
         })
@@ -88,7 +89,7 @@ else {
     const cpus = require('os').cpus().length;
     const getData = (from) => {
         console.log("Start downloading");
-        for (let i = 0; i < (1000 / cpus); i++) {
+        for (let i = 0; i < (5000 / cpus); i++) {
             download2(from);
             sleep(20)
         }
@@ -112,7 +113,7 @@ else {
 }
 
 console.log(require('os').cpus().length);
-console.log("------------------- " + 1000/ require('os').cpus().length + " ----------------------");
+console.log("------------------- " + 1000 / require('os').cpus().length + " ----------------------");
 
 
 // On 127.0.0.1 => Error connection refused
