@@ -36,9 +36,10 @@ else {
     // writes data to given file
     // TODO: Insert file parameter. | and then to see how to program 
     //  ---  behaves (with different file names duo to the id).
-    function write(data) {
+    function write(data, to) {
         if (data) {
-            fs.writeFile('Songs/multi.txt', data, (err, result) => {
+            // CONFLICT!
+            fs.writeFile(to, data, (err, result) => {
                 if(err) console.log("Error: ", err);
             });
             // console.log("Writing..");
@@ -64,7 +65,8 @@ else {
         axios.get('http://10.42.128.61:3000/')
         .then(response => {
             // Editing the file -> CPU bound action
-            write(response.data.replaceAll('.', '.\n'));
+            var path = 'Songs/multi' + temp + '.txt';
+            write(response.data.replaceAll('.', '.\n'), path);
             // console.log("Reading...");
         })
         .catch(error => {

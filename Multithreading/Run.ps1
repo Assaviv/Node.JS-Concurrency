@@ -14,4 +14,8 @@ Measure-Command { node .\multiProcesses.js }
 
 Stop-Job -Name "Server"
 
-cd ..
+cd Songs
+
+Remove-Item ./*.*
+
+cd ../..
