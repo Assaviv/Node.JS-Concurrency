@@ -54,6 +54,7 @@ else {
         {
             var endIn = performance.now();
             console.log('Runtime: ', (endIn - startIn)/1000 + ' seconds');
+            process.exit();
         }
     }
 
@@ -82,9 +83,10 @@ else {
     }
 
     // activate the download several times
+    const cpus = require('os').cpus().length;
     const getData = (from) => {
         console.log("Start downloading");
-        for (let i = 0; i < (1000 / require('os').cpus().length); i++) {
+        for (let i = 0; i < (1000 / cpus); i++) {
             download2(from);
             sleep(20)
         }
@@ -98,6 +100,7 @@ else {
         // call the desired function with it's params
         timeWrapper(getData, web)
         var endIn = performance.now();
+        debugger
         console.log(' - Runtime: ', (endIn - startIn)/1000 + ' seconds');
 
     } catch (error) {
