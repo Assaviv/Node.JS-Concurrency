@@ -29,11 +29,10 @@ function write(data, to) {
 }
 
 async function download2(options) {
-    await axios.get('http://10.42.128.61:3000/')
+    await axios.post('http://10.42.128.61:3000/')
     .then(response => {
-        // console.log("Reading...");
         const path = 'Songs/single' + temp + '.txt';
-        write(response.data.replaceAll('.', '.\n'), path);
+        write(response.data.data.replaceAll('.', '.\n'), path);
     })
     .catch(error => {
         console.log("ERROR: " + error.code);
@@ -69,7 +68,7 @@ const timeWrapper = (callback, param) => {
 
 const getData = (from) => {
     console.log("Start downloading");
-    for (let i = 0; i < 5000; i++) {
+    for (let i = 0; i < 1000; i++) {
         download2(from);  // wait for this to finish
         sleep(20)  // Sometimes work with sleep sometimes dont
     }

@@ -28,7 +28,7 @@ else {
 
     // Data for server
     const web = {
-        host: 'localhost',
+        host: '10.42.128.61',
         port: 3000,
         path: '/'
     };
@@ -38,7 +38,7 @@ else {
     //  ---  behaves (with different file names duo to the id).
     function write(data, to) {
         if (data) {
-            // CONFLICT!
+            // Dont write last file
             fs.writeFile(to, data, (err, result) => {
                 if(err) console.log("Error: ", err);
             });
@@ -63,11 +63,11 @@ else {
     // Download response data from given website
     // TODO: handle the options param
     async function download2(options) {
-        axios.get('http://10.42.128.61:3000/')
+        axios.post('http://' + options.host + ':' + options.port + options.path)
         .then(response => {
             // Editing the file -> CPU bound action
             var path = 'Songs/multi'+ cluster.worker.id + '-' + temp + '.txt';
-            write(response.data.replaceAll('.', '.\n'), path);
+            write(response.data.data.replaceAll('.', '.\n'), path);
             // console.log("Reading...");
         })
         .catch(error => {

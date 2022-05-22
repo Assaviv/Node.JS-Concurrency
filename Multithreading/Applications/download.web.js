@@ -1,12 +1,15 @@
 const cluster = require('cluster')
+const bodyParser = require('body-parser');
+const fs = require('fs');
 
 if (cluster.isMaster) {
     const cpus = require('os').cpus().length;
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < cpus; i++) {
         cluster.fork();
     }
 }
 else {
+    var urlencodedParser = bodyParser.urlencoded({ extended: false })
     var num = 0;
     const express = require('express')
     const app = express()
@@ -21,6 +24,12 @@ else {
     
     app.get('/', (req, res) => {
         res.sendFile('./Public/Song.txt', {root: __dirname});
+    })
+
+    app.post('/', urlencodedParser, (req, res) => {
+        res.json({
+            data: fs.readFileSync('./Public/Song.txt').toString()
+        })
     })
     
     app.use((req, res) => {
