@@ -17,8 +17,7 @@ function runService(workerData) {
 
 async function run() {
     for (let i = 1; i < 9; i++) {
-        // remvoe awAIT
-        const result = runService([125, i])   
+        const result = runService([625, i])   
         console.log(result);     
     }
 }

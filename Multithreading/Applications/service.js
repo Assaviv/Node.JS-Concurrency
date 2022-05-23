@@ -20,7 +20,7 @@ function write(data, to) {
 async function download2(options, id) {
     axios.post('http://' + options.host + ':' + options.port + options.path)
     .then(response => {
-        var path = 'Songs/multi'+ id + '-' + temp + '.txt';
+        var path = 'Songs/multiThreading'+ id + '-' + temp + '.txt';
         write(response.data.data.replaceAll('.', '.\n'), path);
     })
     .catch(error => {
@@ -45,6 +45,10 @@ const getData = (from, workerData) => {
 
 // Main
 try {
+    if(workerData[1] > 4)
+        web.port = 3001
+    else
+        web.port = 3000
     console.log(workerData[1]);
     getData(web, workerData)
     parentPort.postMessage({Working: workerData[1]})

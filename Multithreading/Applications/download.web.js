@@ -13,7 +13,7 @@ else {
     var num = 0;
     const express = require('express')
     const app = express()
-    app.listen(3000)
+    app.listen(process.argv[2])
     
     app.use(express.static('Public'))
     

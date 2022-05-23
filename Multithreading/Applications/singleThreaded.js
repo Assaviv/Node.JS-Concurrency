@@ -21,17 +21,21 @@ function write(data, to) {
     ++temp;
     // console.log(temp);
     process.stdout.write('.');
-    if (temp === 1000)
+    if (temp === 5000)
     {
         var endIn = performance.now();
         console.log('Runtime: ', (endIn - startIn)/1000 + ' seconds with ERRORS: ' + errors);
+    }
+    else if (temp === 2500)
+    {
+        web.port = 3001;
     }
 }
 
 async function download2(options) {
     await axios.post('http://10.42.128.61:3000/')
     .then(response => {
-        const path = 'Songs/single' + temp + '.txt';
+        const path = 'Songs/singleThread' + temp + '.txt';
         write(response.data.data.replaceAll('.', '.\n'), path);
     })
     .catch(error => {
@@ -68,7 +72,7 @@ const timeWrapper = (callback, param) => {
 
 const getData = (from) => {
     console.log("Start downloading");
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < 5000; i++) {
         download2(from);  // wait for this to finish
         sleep(20)  // Sometimes work with sleep sometimes dont
     }

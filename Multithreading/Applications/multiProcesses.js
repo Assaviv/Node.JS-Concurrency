@@ -51,7 +51,7 @@ else {
         ++temp;
         console.log(temp);
         // not getting even close to 1000 -> multiprocessing
-        if (temp === 125)
+        if (temp === 625)
         {
             var endIn = performance.now();
             console.log('Runtime: ', (endIn - startIn)/1000 + ' seconds');
@@ -66,13 +66,14 @@ else {
         axios.post('http://' + options.host + ':' + options.port + options.path)
         .then(response => {
             // Editing the file -> CPU bound action
-            var path = 'Songs/multi'+ cluster.worker.id + '-' + temp + '.txt';
+            var path = 'Songs/multiProcessing'+ cluster.worker.id + '-' + temp + '.txt';
             write(response.data.data.replaceAll('.', '.\n'), path);
             // console.log("Reading...");
         })
         .catch(error => {
             // catch all the weird error that needed to be handled
             console.log(error.code);
+            ++temp
         })
     }
 
@@ -98,6 +99,10 @@ else {
     
     // Main
     try {
+        if (cluster.Worker.id > 3)
+            web.port = 3001
+        else
+            web.port = 3000
         // Start measuring time
         var startIn = performance.now();
         // call the desired function with it's params
